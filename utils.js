@@ -102,7 +102,7 @@ export function askAppChoice ({dialogTitle, dialogMessage, cancelText}) {
  *     cancelText: string | undefined | null
  * }} options
  */
-export function checkOptions (options) {
+export function checkOptions (options): void | boolean {
   if (!options || typeof options !== 'object') {
     throw new MapsException('First parameter of `showLocation` should contain object with options.')
   }
@@ -121,6 +121,7 @@ export function checkOptions (options) {
   if ('app' in options && options.app && apps.indexOf(options.app) < 0) {
     throw new MapsException('Option `app` should be undefined, null, or one of the following: "' + apps.join('", "') + '".')
   }
+  return true;
 }
 
 class MapsException {
