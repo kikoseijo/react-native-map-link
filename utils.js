@@ -4,7 +4,7 @@
 
 import { Linking, ActionSheetIOS, Alert } from 'react-native'
 
-import { prefixes, titles, isIOS, apps } from './constants'
+import { prefixes, titles, isIOS } from './constants'
 
 /**
  * Get available navigation apps.
@@ -80,7 +80,7 @@ export function askAppChoice ({dialogTitle, dialogMessage, cancelText}) {
     }
 
     let options = availableApps.map((app) => ({text: titles[app], onPress: () => resolve(app)}))
-    options.push({text: 'Cancel', onPress: () => resolve(null), style: 'cancel'})
+    options.push({text: cancelText, onPress: () => resolve(null), style: 'cancel'})
     return Alert.alert(dialogTitle, dialogMessage, options, {onDismiss: () => resolve(null)})
   })
 }
@@ -118,8 +118,8 @@ export function checkOptions (options): void | boolean {
   if ('googlePlaceId' in options && options.googlePlaceId && typeof options.googlePlaceId !== 'number') {
     throw new MapsException('Option `googlePlaceId` should be of type `number`.')
   }
-  if ('app' in options && options.app && apps.indexOf(options.app) < 0) {
-    throw new MapsException('Option `app` should be undefined, null, or one of the following: "' + apps.join('", "') + '".')
+  if ('app' in options && options.app && !(options.app in prefixes)) {
+    throw new MapsException('Option `app` should be undefined, null, or one of the following: "' + Object.keys(prefixes).join('", "') + '".')
   }
   return true;
 }
